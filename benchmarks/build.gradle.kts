@@ -22,7 +22,6 @@
  */
 
 import org.noelware.charted.snowflake.gradle.*
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.jetbrains.kotlinx.benchmark")
@@ -64,7 +63,7 @@ kotlin {
         os == "Linux" -> {
             when (arch) {
                 "amd64" -> linuxX64("native")
-                "arm64" -> linuxArm64("native")
+                "arm64", "aarch64" -> linuxArm64("native")
                 else -> error("Linux with architecture $arch is not supported.")
             }
         }
@@ -72,7 +71,7 @@ kotlin {
         os == "Mac OS X" -> {
             when (arch) {
                 "x86_64" -> macosX64("native")
-                "arm64" -> macosArm64("native")
+                "arm64", "aarch64" -> macosArm64("native")
                 else -> error("macOS with architecture $arch is not supported.")
             }
         }

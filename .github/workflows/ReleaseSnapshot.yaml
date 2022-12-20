@@ -34,7 +34,7 @@ jobs:
           - { prettyName: "JS/JVM/Native - Linux x86_64", runner: ubuntu-latest,  publishTask: publish                                   }
           - { prettyName: "Native - Windows",             runner: windows-latest, publishTask: publishNativePublicationToMavenRepository }
           - { prettyName: "Native - macOS",               runner: macos-latest,   publishTask: publishNativePublicationToMavenRepository }
-          - { prettyName: "Native - Linux ARM",           runner: self-hosted,    publishTask: publishNativePublicationToMavenRepository }
+          #- { prettyName: "Native - Linux ARM",           runner: self-hosted,    publishTask: publishNativePublicationToMavenRepository }
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
