@@ -26,7 +26,7 @@ on:
       - prereleased
 jobs:
   release:
-    name: Snapshot release (${{matrix.release.prettyName}}
+    name: Snapshot release (${{matrix.release.prettyName}})
     runs-on: ${{matrix.release.runner}}
     strategy:
       matrix:
@@ -57,7 +57,7 @@ jobs:
       - name: Release!
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ${{matrix.runner.publishTask}} -Dorg.gradle.s3.endpoint=${{secrets.S3_ENDPOINT}}
+          arguments: ${{matrix.release.publishTask}} -Dorg.gradle.s3.endpoint=${{secrets.S3_ENDPOINT}}
         env:
           NOELWARE_PUBLISHING_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
           NOELWARE_PUBLISHING_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
