@@ -72,7 +72,7 @@ kotlin {
         os == "Linux" -> {
             when (arch) {
                 "amd64" -> linuxX64("native")
-                "arm64" -> linuxArm64("native")
+                "arm64", "aarch64" -> linuxArm64("native")
                 else -> error("Linux with architecture $arch is not supported.")
             }
         }
