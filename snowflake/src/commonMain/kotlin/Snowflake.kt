@@ -33,6 +33,16 @@ public const val epochBits: Int = 41
 public const val nodeBits: Int = 10
 
 /**
+ * Creates a new [Snowflake] with a given [nodeId] and [epoch]
+ * @param nodeId The node ID that this [Snowflake] belongs to
+ * @param epoch  Epoch from unix time in milliseconds
+ */
+public fun Snowflake(nodeId: Int, epoch: Long = 1288834974657): Snowflake = Snowflake().apply {
+    this.nodeId = nodeId
+    this.epoch = epoch
+}
+
+/**
  * Represents the actual Snowflake class to generate snowflakes. A [Twitter snowflake](https://developer.twitter.com/en/docs/twitter-ids)
  * is a 64-bit unsigned integer with 4 fields that have a fixed epoch value.
  */

@@ -23,4 +23,44 @@
 
 rootProject.name = "snowflake"
 
-include(":snowflake", ":benchmarks")
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+plugins {
+    id("com.gradle.enterprise") version "3.12"
+}
+
+include(
+    ":snowflake",
+    ":benchmarks"
+)
+
+val buildScanServer = System.getProperty("org.noelware.charted.gradle.build-scan-server", "") ?: ""
+gradleEnterprise {
+    buildScan {
+        if (buildScanServer.isNotEmpty()) {
+            server = buildScanServer
+            isCaptureTaskInputFiles = true
+            publishAlways()
+        } else {
+            termsOfServiceUrl = "https://gradle.com/terms-of-service"
+            termsOfServiceAgree = "yes"
+
+            // Always publish if we're on CI.
+            if (System.getenv("CI") != null) {
+                publishAlways()
+            }
+        }
+
+        obfuscation {
+            ipAddresses { listOf("0.0.0.0") }
+            hostname { "[redacted]" }
+            username { "[redacted]" }
+        }
+    }
+}

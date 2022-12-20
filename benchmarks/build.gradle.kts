@@ -22,6 +22,7 @@
  */
 
 import org.noelware.charted.snowflake.gradle.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.jetbrains.kotlinx.benchmark")
@@ -50,11 +51,6 @@ kotlin {
             kotlinOptions.javaParameters = true
             kotlinOptions.freeCompilerArgs += listOf("-opt-in=kotlin.RequiresOptIn")
         }
-    }
-
-    js {
-        browser()
-        nodejs()
     }
 
     val os = System.getProperty("os.name")
@@ -94,11 +90,13 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.4.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.4.4")
+                implementation(project(":snowflake"))
             }
         }
 
         val jvmMain by getting
-        val jsMain by getting
         val nativeMain by getting
     }
 }
