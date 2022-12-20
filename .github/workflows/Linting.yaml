@@ -89,4 +89,4 @@ jobs:
       - name: Compiles Kotlin source sets
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: compileKotlin --no-daemon --scan
+          arguments: :snowflake:compileKotlin --no-daemon --scan

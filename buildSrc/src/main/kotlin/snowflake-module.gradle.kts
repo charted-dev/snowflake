@@ -22,6 +22,9 @@
  */
 
 import org.noelware.charted.snowflake.gradle.*
+import dev.floofy.utils.gradle.*
+import java.io.StringReader
+import java.util.Properties
 
 plugins {
     kotlin("plugin.serialization")
@@ -72,7 +75,7 @@ kotlin {
         os == "Linux" -> {
             when (arch) {
                 "amd64" -> linuxX64("native")
-                "arm64", "aarch64" -> linuxArm64("native")
+                "aarch64" -> linuxArm64("native")
                 else -> error("Linux with architecture $arch is not supported.")
             }
         }
@@ -80,7 +83,7 @@ kotlin {
         os == "Mac OS X" -> {
             when (arch) {
                 "x86_64" -> macosX64("native")
-                "arm64", "aarch64" -> macosArm64("native")
+                "aarch64" -> macosArm64("native")
                 else -> error("macOS with architecture $arch is not supported.")
             }
         }
@@ -93,7 +96,7 @@ kotlin {
             languageSettings.optIn("kotlin.RequiresOptIn")
         }
 
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.4.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
@@ -129,5 +132,68 @@ spotless {
                 "experimental:fun-keyword-spacing" to "true",
                 "experimental:unnecessary-parentheses-before-trailing-lambda" to "true"
             ))
+    }
+}
+
+// Get the `publishing.properties` file from the `gradle/` directory
+// in the root project.
+val publishingPropsFile = file("${rootProject.projectDir}/gradle/publishing.properties")
+val publishingProps = Properties()
+
+// If the file exists, let's get the input stream
+// and load it.
+if (publishingPropsFile.exists()) {
+    publishingProps.load(publishingPropsFile.inputStream())
+} else {
+    // Check if we do in environment variables
+    val accessKey = System.getenv("NOELWARE_PUBLISHING_ACCESS_KEY") ?: ""
+    val secretKey = System.getenv("NOELWARE_PUBLISHING_SECRET_KEY") ?: ""
+
+    if (accessKey.isNotEmpty() && secretKey.isNotEmpty()) {
+        val data = """
+        |s3.accessKey=$accessKey
+        |s3.secretKey=$secretKey
+        """.trimMargin()
+
+        publishingProps.load(StringReader(data))
+    }
+}
+
+// Check if we have the `NOELWARE_PUBLISHING_ACCESS_KEY` and `NOELWARE_PUBLISHING_SECRET_KEY` environment
+// variables, and if we do, set it in the publishing.properties loader.
+val snapshotRelease: Boolean = run {
+    val env = System.getenv("NOELWARE_PUBLISHING_IS_SNAPSHOT") ?: "false"
+    env == "true"
+}
+
+val allSourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier by "sources"
+    from(sourceSets.main.get().allSource)
+}
+
+val javadocJar by tasks.registering(Jar::class) {
+    description = "Assemble Java documentation with Javadoc"
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+
+    archiveClassifier by "javadoc"
+    from(tasks.javadoc)
+    dependsOn(tasks.javadoc)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("snowflake") {
+            createPublicationMetadata(project, allSourcesJar, javadocJar)
+        }
+    }
+
+    repositories {
+        val url = if (snapshotRelease) "s3://maven.noelware.org/snapshots" else "s3://maven.noelware.org"
+        maven(url) {
+            credentials(AwsCredentials::class.java) {
+                accessKey = publishingProps.getProperty("s3.accessKey") ?: System.getenv("NOELWARE_PUBLISHING_ACCESS_KEY") ?: ""
+                secretKey = publishingProps.getProperty("s3.secretKey") ?: System.getenv("NOELWARE_PUBLISHING_SECRET_KEY") ?: ""
+            }
+        }
     }
 }
