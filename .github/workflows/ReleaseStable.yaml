@@ -54,11 +54,6 @@ jobs:
         with:
           arguments: spotlessCheck --no-daemon --scan
 
-      - name: Compiles Kotlin source sets
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: :snowflake:compileKotlin --no-daemon --scan
-
       - name: Release!
         uses: gradle/gradle-build-action@v2
         with:
