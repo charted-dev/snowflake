@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":snowflake:dokkaHtmlPartial/commonMain":[],":snowflake:dokkaHtmlPartial/jsMain":[":snowflake:dokkaHtmlPartial/commonMain"],":snowflake:dokkaHtmlPartial/jvmMain":[":snowflake:dokkaHtmlPartial/commonMain"],":snowflake:dokkaHtmlPartial/nativeMain":[":snowflake:dokkaHtmlPartial/commonMain"]}'

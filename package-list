@@ -1,0 +1,5 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:snowflake
+org.noelware.charted.snowflake
