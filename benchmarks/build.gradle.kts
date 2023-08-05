@@ -90,7 +90,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
-                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.4.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.4.9")
                 implementation(project(":snowflake"))
             }
         }
