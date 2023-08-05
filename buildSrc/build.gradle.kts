@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.4.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.4.9")
     implementation("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.18.5")
     implementation("com.diffplug.spotless:spotless-plugin-gradle:6.12.0")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.7.20")
