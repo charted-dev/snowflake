@@ -32,7 +32,7 @@ pluginManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.12"
+    id("com.gradle.enterprise") version "3.15.1"
 }
 
 include(
